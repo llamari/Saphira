@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
+import { sequelizeDatabase } from '../../db.js';
 
-const Doacao = sequelizeDatabase.define('Doacao', {
+const Doacao = sequelizeDatabase.define('doacao', {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -27,9 +28,9 @@ const Doacao = sequelizeDatabase.define('Doacao', {
         type: DataTypes.STRING,
         allowNull: false
     },
-
-
 }, {
-    tableName: 'doacoes',
+    tableName: 'Doacao',
     timestamps: true
 });
+
+export default Doacao;

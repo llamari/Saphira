@@ -20,7 +20,7 @@ app.get('/', (req, res) => res.send("API da Saphira rodando!"))
 
 app.post('/auth', login);
 
-app.post('/donate', donation);
+app.post('/doacoes', donation);
 
 const PORT = process.env.PORT || 5000;
 

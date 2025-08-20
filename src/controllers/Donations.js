@@ -1,8 +1,13 @@
 import { QrCodePix } from "qrcode-pix";
 import QRCode from 'qrcode';
+import Doacao from "../models/Doacao.js";
 
 export const donation = async (req, res) => {
-    const {nome, email, valor, mensagem} = req.body;
+    const { nome, email, valor, mensagem } = req.body;
+
+    if (!nome || !email || !valor || valor<=0 || !mensagem) {
+        return res.send({"erro": "Valor da doação é obrigatório e deve ser um número positivo"})
+    }
 
     const dadosPix = {
         version: '01',
@@ -10,7 +15,7 @@ export const donation = async (req, res) => {
         name: 'Sara Lamari Silva',
         city: 'Campinas',
         value: valor,
-        description: mensagem
+        message: mensagem
     };
 
     const qrCodePix = QrCodePix(dadosPix);
@@ -18,10 +23,23 @@ export const donation = async (req, res) => {
 
     try {
         const qrCodeImage = await QRCode.toDataURL(payload);
-        console.log(qrCodeImage);
-        res.send({qrCodeImage});
+        const donation = await Doacao.create({
+            nome,
+            email,
+            valor,
+            mensagem: mensagem,
+            linkPix: payload
+        })
+
+        res.send({
+            "doação_id": donation.id,
+            "nome": donation.nome,
+            "valor": donation.valor,
+            "mensagem": donation.mensagem,
+            "linkPix": donation.linkPix,
+            "qrcode": qrCodeImage
+        });
     } catch (error) {
-        console.error("Erro ao gerar QR Code:", error);
-        return null;
+        return res.send({"erro": "Erro ao processar a doação"});
     }
 }
