@@ -1,10 +1,17 @@
 import Animal from '../models/Animal'
 
 const listAnimals = async (req, res) => {
-    const animals = await Animal.findAll();
-
-    res.send({data: animals, total: animals.length})
+    try {
+        const animals = await Animal.findAll();
+        res.status(200).send({data: animals, total: animals.length})
+    } catch (error) {
+        console.log("Unexpected error! - ");
+        console.log(error);
+        res.status(500).send({erro: "Erro ao buscar animais"});
+    }
+    
 }
+
 const updateAnimal = async (req, res) => {
     const updates = {};
 
@@ -39,7 +46,7 @@ const updateAnimal = async (req, res) => {
 
         console.log("Unexpected error! - ");
         console.log(error);
-        res.status(500).send("Erro ao atualizar animal");
+        return res.status(500).send("Erro ao atualizar animal");
     }
 }
 const deleteAnimal = async (req, res) => {
@@ -52,7 +59,7 @@ const deleteAnimal = async (req, res) => {
 
         return res.status(204).send({message: "Animal removido com sucesso"})
     } catch {
-        res.status(500).send({erro: "Erro ao remover animal"})
+        return res.status(500).send({erro: "Erro ao remover animal"})
     }
    
 }
