@@ -1,12 +1,12 @@
 import { DataTypes } from 'sequelize';
-import sequelizeDatabse from "../../db.js";
+import { sequelizeDatabase } from "../../db.js";
 
-const PedidoAdocao = sequelizeDatabse.define('PedidoAdocao', {
+const PedidoAdocao = sequelizeDatabase.define('PedidoAdocao', {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
     },
     status: {
         type: DataTypes.STRING,
@@ -19,11 +19,13 @@ const PedidoAdocao = sequelizeDatabse.define('PedidoAdocao', {
     },
     tutorId: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     animalId: {
         type: DataTypes.UUID,
-        allowNull: false
+        allowNull: false,
+        unique: true
     }
 }, {
     tableName: 'pedidos_adocao',
