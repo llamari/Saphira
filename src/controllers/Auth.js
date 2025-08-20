@@ -10,7 +10,6 @@ export const login = async (req, res) => {
             res.send({ "erro": "Email ou senha inválidos." })
         }
     } catch (error) {
-        console.log(error)
         res.send({"erro": "Erro interno ao tentar fazer o login."})
     }
 }
