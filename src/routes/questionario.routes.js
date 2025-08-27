@@ -1,6 +1,6 @@
-import { postQuestionario } from "../controllers/qustionarioController";
+import { postQuestionario } from "../controllers/qustionarioController.js";
 import express from "express";
-import verificadorCamposForm from "../middlewares/verificaCamposForm";
+import verificadorCamposForm from "../middlewares/verificaCamposForm.js";
 
 const questionario = express.Router()
 

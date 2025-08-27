@@ -1,4 +1,4 @@
-import Questionario from "../models/Questionario";
+import Questionario from "../models/Questionario.js";
 
 export const postQuestionario = async(req,res) => {
     const body = req.body;

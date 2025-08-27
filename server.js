@@ -1,7 +1,7 @@
 import { sequelizeDatabase } from "./db.js"
 import express from "express";
 import { login } from "./src/controllers/Auth.js";
-import Usuario from "./src/models/Usuario.js";
+import { donation } from "./src/controllers/Donations.js";
 import adocoes from "./src/routes/adocoes.routes.js";
 import animais from "./src/routes/animais.routes.js";
 import questionario from "./src/routes/questionario.routes.js";
@@ -26,9 +26,12 @@ app.use(adocoes);
 app.use(animais);
 app.use(questionario);
 
+app.post('/doacoes', donation);
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, '0.0.0.0', () => {
+    
     
     console.log(`Servidor rodando na porta ${PORT}`);
 });
