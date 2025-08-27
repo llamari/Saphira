@@ -1,5 +1,5 @@
 # Saphira
-**SARA** | POST /animais
+**SARA** | POST /animais ✓
 
 **BEEA** | GET /animais ✓
 
