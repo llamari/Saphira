@@ -1,5 +1,3 @@
-import express from "express";
-
 export default function verificadorCamposForm(req, res, next){ 
     const campos = [
         empregado,
