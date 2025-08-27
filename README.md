@@ -1,5 +1,5 @@
 # Saphira
-**SARA** | POST /animais
+**SARA** | POST /animais ✓
 
 **BEEA** | GET /animais ✓
 
@@ -9,7 +9,7 @@
 
 **ZIANI** | GET /tutores/:id ✓
 
-**MAGUIRE** | POST /questionário
+**MAGUIRE** | POST /questionário ✓ não testado
 
 **MAGUIRE** | POST /adocoes ✓ não testado
 

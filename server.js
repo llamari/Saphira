@@ -4,6 +4,7 @@ import { login } from "./src/controllers/Auth.js";
 import Usuario from "./src/models/Usuario.js";
 import adocoes from "./src/routes/adocoes.routes.js";
 import animais from "./src/routes/animais.routes.js";
+import questionario from "./src/routes/questionario.routes.js";
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.get('/', (req, res) => res.send("API da Saphira rodando!"))
 app.post('/auth', login);
 app.use(adocoes);
 app.use(animais);
+app.use(questionario);
 
 const PORT = process.env.PORT || 5000;
 
