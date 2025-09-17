@@ -7,7 +7,6 @@ import { donation } from "./src/controllers/Donations.js";
 import adocoes from "./src/routes/adocoes.routes.js";
 import animais from "./src/routes/animais.routes.js";
 import questionario from "./src/routes/questionario.routes.js";
-import { listAnimals, updateAnimal, deleteAnimal } from "./src/controllers/Animals.js";
 
 const app = express();
 
