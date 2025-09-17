@@ -2,10 +2,12 @@ import { sequelizeDatabase } from "./db.js"
 import express from "express";
 import { login } from "./src/controllers/Auth.js";
 import Usuario from "./src/models/Usuario.js";
+import userRoutes from "./src/routes.js/usersRoutes.js";
 
 const app = express();
 
 app.use(express.json());
+app.use(userRoutes);
 
 (async () => {
     try {
