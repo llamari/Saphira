@@ -1,6 +1,8 @@
-import Animal from '../models/Animal'
+import Animal from '../models/Animal.js'
 
 const listAnimals = async (req, res) => {
+    console.log(Animal)
+
     try {
         const animals = await Animal.findAll();
         res.status(200).send({data: animals, total: animals.length})
@@ -51,7 +53,7 @@ const updateAnimal = async (req, res) => {
 }
 const deleteAnimal = async (req, res) => {
     try {
-        const deletedCount = await User.destroy({ where: { id: req.params.id } });
+        const deletedCount = await Animal.destroy({ where: { id: req.params.id } });
 
         if (deletedCount == 0) {
             return res.status(404).send({erro: "Animal não encontrado"})
