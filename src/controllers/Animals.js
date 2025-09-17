@@ -1,50 +1,20 @@
-import { Animal } from "../models/Animal.js";
-import multer from "multer";
-const upload = multer();
+import { Animal } from '../models/Animal.js'
 
-export const postAnimal = [upload.single('foto'), async (req, res) => {
-    const {
-        nome,
-        especie,
-        porte,
-        castrado,
-        vacinado,
-        descricao,
-        foto,
-    } = req.body;
+const listAnimals = async (req, res) => {
+    console.log(Animal)
 
-    if (!nome || !especie || !porte || !castrado || !vacinado || !descricao || !foto) return res.status(400).send({ "erro": "Todos os campos obrigatórios devem ser preenchidos corretamente." })
-
-    try {
-        const animal = await Animal.create({
-            nome,
-            especie,
-            porte,
-            castrado,
-            vacinado,
-            descricao,
-            foto,
-        })
-        return res.send({ animal })
-    } catch (error) {
-        console.log(error)
-        return res.status(500).send({ "erro": "Erro interno ao cadastrar o animal." });
-    }
-
-}
-]
-
-export const listAnimals = async (req, res) => {
     try {
         const animals = await Animal.findAll();
         res.status(200).send({data: animals, total: animals.length})
     } catch (error) {
+        console.log("Unexpected error! - ");
+        console.log(error);
         res.status(500).send({erro: "Erro ao buscar animais"});
     }
     
 }
 
-export const updateAnimal = async (req, res) => {
+const updateAnimal = async (req, res) => {
     const updates = {};
 
     if ('nome' in req.body) updates.nome = req.body.nome;
@@ -56,13 +26,26 @@ export const updateAnimal = async (req, res) => {
     if ('descricao' in req.body) updates.descricao = req.body.descricao;
     if ('foto' in req.body) updates.foto = req.body.foto;
 
-    const target_id = req.params.id 
+    console.log("Trying to find by id: " + req.params.id)
+
+    let animal
 
     try {
-        const [updatedCount] = await Animal.update(updates, {where: { id: target_id } });
+        animal = await Animal.findByPk(req.params.id);
+    } catch (error) {
+        animal = null
+        return res.status(500).json({erro: "Erro Interno ao Encontrar Animal"})
+    }
+
+    if (!animal) {
+       return res.status(404).json({erro: "Animal não encontrado"})
+    }
+
+    try {
+        const [updatedCount] = await Animal.update(updates, {where: { id: req.params.id } });
     
         if (updatedCount == 0) {
-            return res.status(404).send({erro: "Animal Não Encontrado"})
+            return res.status(404).send({erro: "Animal Não Atualizado"})
         } else {
             const now = new Date();
             const isoString = now.toISOString();
@@ -81,8 +64,7 @@ export const updateAnimal = async (req, res) => {
         return res.status(500).send("Erro ao atualizar animal");
     }
 }
-
-export const deleteAnimal = async (req, res) => {
+const deleteAnimal = async (req, res) => {
     try {
         const deletedCount = await Animal.destroy({ where: { id: req.params.id } });
 
@@ -94,4 +76,7 @@ export const deleteAnimal = async (req, res) => {
     } catch {
         return res.status(500).send({erro: "Erro ao remover animal"})
     }
+   
 }
+
+export { listAnimals, updateAnimal, deleteAnimal }

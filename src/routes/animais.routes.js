@@ -3,9 +3,9 @@ import { deleteAnimal, listAnimals, postAnimal, updateAnimal } from "../controll
 
 const animais = e.Router();
 
-animais.post('/animais', postAnimal);
 animais.get('/animais/', listAnimals);
 animais.patch('/animais/:id', updateAnimal);
 animais.delete('/animais/:id', deleteAnimal);
+animais.post('/animais', e.json({ limit: '50mb' }), postAnimal);
 
 export default animais;
