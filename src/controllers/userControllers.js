@@ -1,4 +1,4 @@
-import Usuario from "../models/Usuario";
+import Usuario from "../models/Usuario.js";
 
 export const GetUsers = async (req, res) => {
     try {
@@ -34,6 +34,7 @@ export const PostUsers = async (req, res) => {
         }
 
         const newUser = await Usuario.create({ nome_completo, email, senha, cidade, estado, idade, telefone, celular, cpf, endereco, bairro, cep, instagram, facebook, administrador });
+        console.log(newUser);
         res.status(201).json(newUser);
     } 
     catch (error) {
