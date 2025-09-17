@@ -1,6 +1,8 @@
-import Animal from '../models/Animal'
+import { Animal } from '../models/Animal.js'
 
 const listAnimals = async (req, res) => {
+    console.log(Animal)
+
     try {
         const animals = await Animal.findAll();
         res.status(200).send({data: animals, total: animals.length})
@@ -24,13 +26,26 @@ const updateAnimal = async (req, res) => {
     if ('descricao' in req.body) updates.descricao = req.body.descricao;
     if ('foto' in req.body) updates.foto = req.body.foto;
 
-    const target_id = req.params.id 
+    console.log("Trying to find by id: " + req.params.id)
+
+    let animal
 
     try {
-        const [updatedCount] = await Animal.update(updates, {where: { id: target_id } });
+        animal = await Animal.findByPk(req.params.id);
+    } catch (error) {
+        animal = null
+        return res.status(500).json({erro: "Erro Interno ao Encontrar Animal"})
+    }
+
+    if (!animal) {
+       return res.status(404).json({erro: "Animal não encontrado"})
+    }
+
+    try {
+        const [updatedCount] = await Animal.update(updates, {where: { id: req.params.id } });
     
         if (updatedCount == 0) {
-            return res.status(404).send({erro: "Animal Não Encontrado"})
+            return res.status(404).send({erro: "Animal Não Atualizado"})
         } else {
             const now = new Date();
             const isoString = now.toISOString();
@@ -51,7 +66,7 @@ const updateAnimal = async (req, res) => {
 }
 const deleteAnimal = async (req, res) => {
     try {
-        const deletedCount = await User.destroy({ where: { id: req.params.id } });
+        const deletedCount = await Animal.destroy({ where: { id: req.params.id } });
 
         if (deletedCount == 0) {
             return res.status(404).send({erro: "Animal não encontrado"})

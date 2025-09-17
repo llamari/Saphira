@@ -11,7 +11,7 @@ import { listAnimals, updateAnimal, deleteAnimal } from "./src/controllers/Anima
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
 (async () => {
     try {
@@ -32,9 +32,9 @@ app.use(questionario);
 app.post('/doacoes', donation);
 
 // Animal dashboard routes
-app.get('/animais/', listAnimals);
-app.patch('/animais/:id', updateAnimal);
-app.delete('/animais/:id', deleteAnimal);
+app.get('/admin/animais/', listAnimals);
+app.patch('/admin/animais/:id', updateAnimal);
+app.delete('/admin/animais/:id', deleteAnimal);
 
 const PORT = process.env.PORT || 5000;
 

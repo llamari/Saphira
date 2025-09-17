@@ -9,12 +9,11 @@ export const postAnimal = [upload.single('foto'), async (req, res) => {
         porte,
         castrado,
         vacinado,
-        descricao
+        descricao,
+        foto,
     } = req.body;
 
-    const foto = req.file;
-
-    if (!nome || !especie || !porte || !castrado || !vacinado || !descricao) return res.status(400).send({ "erro": "Todos os campos obrigatórios devem ser preenchidos corretamente." })
+    if (!nome || !especie || !porte || !castrado || !vacinado || !descricao || !foto) return res.status(400).send({ "erro": "Todos os campos obrigatórios devem ser preenchidos corretamente." })
 
     try {
         const animal = await Animal.create({
@@ -24,7 +23,7 @@ export const postAnimal = [upload.single('foto'), async (req, res) => {
             castrado,
             vacinado,
             descricao,
-            foto: foto.buffer
+            foto,
         })
         return res.send({ animal })
     } catch (error) {
