@@ -1,29 +1,36 @@
 # Saphira
-**SARA** | POST /animais
+**INTEGRANTES:**
+Beatriz Vinguerti Xavier,
+Felipe Hiroshi Carvalho Dinnouti,
+Gabriel Ziani Alves,
+Sara Lamari Silva,
+Vitor Paiva Nunes de Paula
 
-**BEEA** | GET /animais
+**SARA** | POST /animais ✓
 
-**ZIANI** | POST /tutores
+**BEEA** | GET /animais ✓
 
-**ZIANI** | PATCH /tutores/:id
+**ZIANI** | POST /tutores ✓
 
-**ZIANI** | GET /tutores/:id
+**ZIANI** | PATCH /tutores/:id ✓
 
-**MAGUIRE** | POST /questionário
+**ZIANI** | GET /tutores/:id ✓
 
-**MAGUIRE** | POST /adocoes
+**MAGUIRE** | POST /questionário ✓ não testado
 
-**JAPONÊS** | GET /admin/animais
+**MAGUIRE** | POST /adocoes ✓ não testado
 
-**JAPONÊS** | PATCH /admin/animais/:id
+**JAPONÊS** | GET /admin/animais ✓ não testado
 
-**JAPONÊS** | DELETE /admin/animais/:id
+**JAPONÊS** | PATCH /admin/animais/:id ✓ não testado
 
-**BEEA** | GET /animais/:id
+**JAPONÊS** | DELETE /admin/animais/:id ✓ não testado
 
-**SARA** | POST /login
+**BEEA** | GET /animais/:id 
 
-**SARA** | POST /doacoes
+**SARA** | POST /login ✓
+
+**SARA** | POST /doacoes ✓
 
 Link do repositório do Alex: 
 [repositorio](https://github.com/alexnasciment3/projeto_bento_2S_2025.git)
