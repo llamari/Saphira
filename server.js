@@ -12,7 +12,13 @@ import userRoutes from "./src/routes.js/usersRoutes.js";
 // Importing Controllers
 import { login } from "./src/controllers/Auth.js";
 import { donation } from "./src/controllers/Donations.js";
+<<<<<<< HEAD
+import adocoes from "./src/routes/adocoes.routes.js";
+import animais from "./src/routes/animais.routes.js";
+import questionario from "./src/routes/questionario.routes.js";
+=======
 import { listAnimals, updateAnimal, deleteAnimal } from "./src/controllers/Animals.js";
+>>>>>>> 5ea5778ed7c0177064bdd16e84234debb297fba0
 
 const app = express();
 app.use(express.json({ limit: '50mb' }));

@@ -42,7 +42,7 @@ describe('Teste dos pedidos de adoção', () => {
             foto: undefined
         };
 
-        PedidoAdocao.create.mockResolvedValue(mockAdocaoCreated);
+        PedidoAdocao.create = jest.fn().mockResolvedValue(mockAdocaoCreated);
 
         await postAdocaoHandler(req, res);
 
@@ -95,7 +95,7 @@ describe('Teste dos pedidos de adoção', () => {
         const req = mockRequest(adocaoData);
         const res = mockResponse();
 
-        PedidoAdocao.create.mockRejectedValue(new Error("DB error"));
+        PedidoAdocao.create = jest.fn().mockRejectedValue(new Error("DB error"));
 
         await postAdocaoHandler(req, res);
 
