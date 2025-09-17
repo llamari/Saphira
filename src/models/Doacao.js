@@ -1,39 +1,36 @@
 import { DataTypes } from 'sequelize';
+import { sequelizeDatabase } from '../../db.js';
 
-export default (sequelize) => {
-    const Doacao = sequelize.define('Doacao', {
-        id: {
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
-            primaryKey: true,
-            allowNull: false
-        },
-        nome: { 
-            type: DataTypes.STRING,
-            allowNull: false 
-        },
-        email: { 
-            type: DataTypes.STRING,
-            allowNull: true
-        },
-        valor: { 
-            type: DataTypes.FLOAT,
-            allowNull: false 
-        },
-        linkPix: { 
-            type: DataTypes.STRING,
-            allowNull: false 
-        },
-        mensagem: {
-            type: DataTypes.STRING,
-            allowNull: false 
-        },
+const Doacao = sequelizeDatabase.define('doacao', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        allowNull: false
+    },
+    nome: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    valor: {
+        type: DataTypes.FLOAT,
+        allowNull: false
+    },
+    linkPix: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    mensagem: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+}, {
+    tableName: 'Doacao',
+    timestamps: true
+});
 
-        
-    }, {
-        tableName: 'doacoes',
-        timestamps: true
-    });
-
-    return Doacao;
-};
+export default Doacao;
