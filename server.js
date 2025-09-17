@@ -31,11 +31,6 @@ app.use(questionario);
 
 app.post('/doacoes', donation);
 
-// Animal dashboard routes
-app.get('/admin/animais/', listAnimals);
-app.patch('/admin/animais/:id', updateAnimal);
-app.delete('/admin/animais/:id', deleteAnimal);
-
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, '0.0.0.0', () => {

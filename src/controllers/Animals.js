@@ -11,7 +11,6 @@ const listAnimals = async (req, res) => {
         console.log(error);
         res.status(500).send({erro: "Erro ao buscar animais"});
     }
-    
 }
 
 const updateAnimal = async (req, res) => {
