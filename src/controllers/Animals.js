@@ -1,4 +1,4 @@
-import Animal from '../models/Animal.js'
+import { Animal } from '../models/Animal.js'
 
 const listAnimals = async (req, res) => {
     console.log(Animal)
@@ -26,13 +26,26 @@ const updateAnimal = async (req, res) => {
     if ('descricao' in req.body) updates.descricao = req.body.descricao;
     if ('foto' in req.body) updates.foto = req.body.foto;
 
-    const target_id = req.params.id 
+    console.log("Trying to find by id: " + req.params.id)
+
+    let animal
 
     try {
-        const [updatedCount] = await Animal.update(updates, {where: { id: target_id } });
+        animal = await Animal.findByPk(req.params.id);
+    } catch (error) {
+        animal = null
+        return res.status(500).json({erro: "Erro Interno ao Encontrar Animal"})
+    }
+
+    if (!animal) {
+       return res.status(404).json({erro: "Animal não encontrado"})
+    }
+
+    try {
+        const [updatedCount] = await Animal.update(updates, {where: { id: req.params.id } });
     
         if (updatedCount == 0) {
-            return res.status(404).send({erro: "Animal Não Encontrado"})
+            return res.status(404).send({erro: "Animal Não Atualizado"})
         } else {
             const now = new Date();
             const isoString = now.toISOString();

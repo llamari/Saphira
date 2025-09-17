@@ -11,7 +11,7 @@ import { listAnimals, updateAnimal, deleteAnimal } from "./src/controllers/Anima
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
 (async () => {
     try {
