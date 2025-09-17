@@ -1,9 +1,11 @@
 import express from 'express';
-import { GetUsers, GetUsersId, PatchUsersId, PostUsers } from '../controllers/userControllers';
+import { GetUsers, GetUsersId, PatchUsersId, PostUsers } from '../controllers/userControllers.js';
 
-const router = express.Router();
+const userRoutes = express.Router();
 
-router.get('/tutores', GetUsers);
-router.get('/tutores/:id', GetUsersId);
-router.post('/tutores', PostUsers);
-router.patch('/tutores/:id', PatchUsersId);
+userRoutes.get('/tutores', GetUsers);
+userRoutes.get('/tutores/:id', GetUsersId);
+userRoutes.post('/tutores', PostUsers);
+userRoutes.patch('/tutores/:id', PatchUsersId);
+
+export default userRoutes;
