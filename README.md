@@ -1,29 +1,29 @@
 # Saphira
-**SARA** | POST /animais
+**SARA** | POST /animais ✓
 
-**BEEA** | GET /animais
+**BEEA** | GET /animais ✓
 
-**ZIANI** | POST /tutores
+**ZIANI** | POST /tutores ✓
 
-**ZIANI** | PATCH /tutores/:id
+**ZIANI** | PATCH /tutores/:id ✓
 
-**ZIANI** | GET /tutores/:id
+**ZIANI** | GET /tutores/:id ✓
 
-**MAGUIRE** | POST /questionário
+**MAGUIRE** | POST /questionário ✓ não testado
 
-**MAGUIRE** | POST /adocoes
+**MAGUIRE** | POST /adocoes ✓ não testado
 
-**JAPONÊS** | GET /admin/animais
+**JAPONÊS** | GET /admin/animais ✓ não testado
 
-**JAPONÊS** | PATCH /admin/animais/:id
+**JAPONÊS** | PATCH /admin/animais/:id ✓ não testado
 
-**JAPONÊS** | DELETE /admin/animais/:id
+**JAPONÊS** | DELETE /admin/animais/:id ✓ não testado
 
-**BEEA** | GET /animais/:id
+**BEEA** | GET /animais/:id 
 
-**SARA** | POST /login
+**SARA** | POST /login ✓
 
-**SARA** | POST /doacoes
+**SARA** | POST /doacoes ✓
 
 Link do repositório do Alex: 
 [repositorio](https://github.com/alexnasciment3/projeto_bento_2S_2025.git)
