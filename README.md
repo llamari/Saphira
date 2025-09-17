@@ -1,4 +1,11 @@
 # Saphira
+**INTEGRANTES:**
+Beatriz Vinguerti Xavier,
+Felipe Hiroshi Carvalho Dinnouti,
+Gabriel Ziani Alves,
+Sara Lamari Silva,
+Vitor Paiva Nunes de Paula
+
 **SARA** | POST /animais ✓
 
 **BEEA** | GET /animais ✓
