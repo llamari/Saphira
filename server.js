@@ -8,10 +8,12 @@ import adocoes from "./src/routes/adocoes.routes.js";
 import animais from "./src/routes/animais.routes.js";
 import questionario from "./src/routes/questionario.routes.js";
 import { listAnimals, updateAnimal, deleteAnimal } from "./src/controllers/Animals.js";
+import logRequisicoes from "./src/middlewares/logRequisicoes.js";
 
 const app = express();
 
 app.use(express.json());
+app.use(logRequisicoes);
 
 (async () => {
     try {
