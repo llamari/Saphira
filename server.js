@@ -1,18 +1,23 @@
 import { sequelizeDatabase } from "./db.js"
 import express from "express";
 
-// Importing Controllers
-import { login } from "./src/controllers/Auth.js";
-import { donation } from "./src/controllers/Donations.js";
+import Usuario from "./src/models/Usuario.js";
+
+// Importing routes
 import adocoes from "./src/routes/adocoes.routes.js";
 import animais from "./src/routes/animais.routes.js";
 import questionario from "./src/routes/questionario.routes.js";
+import userRoutes from "./src/routes.js/usersRoutes.js";
+
+// Importing Controllers
+import { login } from "./src/controllers/Auth.js";
+import { donation } from "./src/controllers/Donations.js";
 import { listAnimals, updateAnimal, deleteAnimal } from "./src/controllers/Animals.js";
 
 const app = express();
-
 app.use(express.json({ limit: '50mb' }));
 
+// Synchronizing the database
 (async () => {
     try {
         await sequelizeDatabase.sync();
@@ -25,16 +30,14 @@ app.use(express.json({ limit: '50mb' }));
 app.get('/', (req, res) => res.send("API da Saphira rodando!"))
 
 app.post('/auth', login);
+
+// Registering Routes
 app.use(adocoes);
 app.use(animais);
 app.use(questionario);
+app.use(userRoutes);
 
 app.post('/doacoes', donation);
-
-// Animal dashboard routes
-app.get('/admin/animais/', listAnimals);
-app.patch('/admin/animais/:id', updateAnimal);
-app.delete('/admin/animais/:id', deleteAnimal);
 
 const PORT = process.env.PORT || 5000;
 
