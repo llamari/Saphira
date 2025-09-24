@@ -1,4 +1,4 @@
-import Animal from '../models/Animal'
+import { Animal }  from '../models/Animal.js'
 
 const listAnimals = async (req, res) => {
     try {

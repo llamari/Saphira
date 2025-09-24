@@ -1,5 +1,6 @@
 'use strict';
 
+import { v4 as uuidv4 } from 'uuid';
 
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
