@@ -60,7 +60,7 @@ const Usuario = sequelizeDatabase.define('usuario', {
     },
     instagram: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: true,
     },
     facebook: {
         type: DataTypes.STRING,
@@ -70,6 +70,14 @@ const Usuario = sequelizeDatabase.define('usuario', {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
+    },
+    createdAt:{
+        type: DataTypes.DATE,
+        allowNull: false, 
+        defaultValue: new Date()
+    },
+    updatedAt:{
+        type: DataTypes.DATE,
     }
 }, {
     tableName: 'Usuario',
