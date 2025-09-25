@@ -1,4 +1,4 @@
-import { postQuestionario } from "../controllers/qustionarioController.js";
+import { postQuestionario } from "../controllers/questionarioController.js";
 import express from "express";
 import verificadorCamposForm from "../middlewares/verificaCamposForm.js";
 
