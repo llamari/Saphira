@@ -1,5 +1,5 @@
 import e from "express";
-import { postAdocoes } from "../controllers/adocoesControllers.js";
+import { postAdocoes } from "../controllers/adocoes.controller";
 
 const adocoes = e.Router();
 

@@ -1,6 +1,5 @@
 import e from "express";
-import { deleteAnimal, listAnimals, postAnimal, updateAnimal } from "../controllers/animaisControllers.js";
-import { GetAnimals, GetAnimalsId } from "../controllers/animalsControllers.js";
+import { deleteAnimal, GetAnimals, GetAnimalsId, listAnimals, postAnimal, updateAnimal } from "../controllers/animais.controller";
 
 const animais = e.Router();
 

@@ -1,5 +1,5 @@
 import { describe, jest, test, afterEach } from '@jest/globals';
-import { deleteAnimal, listAnimals, postAnimal, updateAnimal } from '../../controllers/animaisControllers';
+import { deleteAnimal, GetAnimals, GetAnimalsId, listAnimals, postAnimal, updateAnimal } from '../../controllers/animais.controller.js';
 import { Animal } from '../../models/Animal';
 
 jest.mock('../../models/Animal', () => ({
@@ -7,6 +7,8 @@ jest.mock('../../models/Animal', () => ({
     Animal: {
         create: jest.fn(),
         destroy: jest.fn(),
+        findAll: jest.fn(),
+        findOne: jest.fn(),
     }
 }));
 
@@ -28,7 +30,7 @@ describe('Teste dos animais', () => {
     });
 
     const postAnimalHandler = postAnimal[1];
-    const getAnimaisHandler = listAnimals;
+    const listAnimaisHandler = listAnimals;
     const updateAnimalHandler = updateAnimal;
     const deleteAnimalHandler = deleteAnimal;
 
@@ -116,7 +118,7 @@ describe('Teste dos animais', () => {
             { id: 2, nome: "Mimi", especie: "Gato" }
         ];
         Animal.findAll = jest.fn().mockResolvedValue(mockAnimals);
-        await getAnimaisHandler(req, res);
+        await listAnimaisHandler(req, res);
 
         expect(res.send).toHaveBeenCalledWith({ data: mockAnimals, total: mockAnimals.length });
     });
@@ -127,7 +129,7 @@ describe('Teste dos animais', () => {
 
         Animal.findAll = jest.fn().mockRejectedValue(new Error("DB error"));
 
-        await getAnimaisHandler(req, res);
+        await listAnimaisHandler(req, res);
 
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.send).toHaveBeenCalledWith({
@@ -255,5 +257,77 @@ describe('Teste dos animais', () => {
 
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.send).toHaveBeenCalledWith({ erro: "Erro ao remover animal" });
+    });
+
+    test('GetAnimals deve retornar todos os animais com filtros aplicados', async () => {
+        const req = { query: { especie: 'cachorro', sort: 'recentes' } };
+        const res = mockResponse();
+
+        const mockAnimals = [
+            { id: 1, especie: 'Cachorro', porte: 'Pequeno' },
+            { id: 2, especie: 'Cachorro', porte: 'Grande' }
+        ];
+
+        Animal.findAll = jest.fn().mockResolvedValue(mockAnimals);
+
+        await GetAnimals(req, res);
+
+        expect(Animal.findAll).toHaveBeenCalledWith(expect.objectContaining({
+            where: expect.any(Object),
+            order: [["createdAt", "DESC"]],
+        }));
+
+        expect(res.status).toHaveBeenCalledWith(201);
+        expect(res.send).toHaveBeenCalledWith({ message: 'Sucesso', animais: mockAnimals });
+    });
+
+    test('GetAnimals deve retornar 500 em caso de erro', async () => {
+        const req = { query: {} };
+        const res = mockResponse();
+
+        Animal.findAll = jest.fn().mockRejectedValue(new Error("DB error"));
+
+        await GetAnimals(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Erro ao buscar animais' });
+    });
+
+    test('GetAnimalsId deve retornar um animal por ID', async () => {
+        const req = { params: { id: '1' } };
+        const res = mockResponse();
+
+        const mockAnimal = { id: 1, nome: 'Nick', especie: 'Cachorro' };
+        Animal.findOne = jest.fn().mockResolvedValue(mockAnimal);
+
+        await GetAnimalsId(req, res);
+
+        expect(Animal.findOne).toHaveBeenCalledWith({ where: { id: '1' } });
+        expect(res.status).toHaveBeenCalledWith(201);
+        expect(res.json).toHaveBeenCalledWith({ message: "Sucesso", animal: mockAnimal });
+    });
+
+    test('GetAnimalsId deve retornar 404 se não encontrar o animal', async () => {
+        const req = { params: { id: '999' } };
+        const res = mockResponse();
+
+        Animal.findOne = jest.fn().mockResolvedValue(null);
+
+        await GetAnimalsId(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.json).toHaveBeenCalledWith({ message: "Animal não encontrado" });
+    });
+
+    test('GetAnimalsId deve retornar 500 em caso de erro', async () => {
+        const req = { params: { id: '1' } };
+        const res = mockResponse();
+
+        Animal.findOne = jest.fn().mockRejectedValue(new Error("DB error"));
+
+        await GetAnimalsId(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: "Erro ao buscar animal" });
     });
 });
