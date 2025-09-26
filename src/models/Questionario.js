@@ -187,6 +187,14 @@ const Questionario = sequelizeDatabase.define('Questionario', {
     data_disponivel_para_buscar_animal: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    createdAt:{
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date()
+    },
+    updatedAt:{
+        type: DataTypes.DATE,
     }
 }, {
     tableName: 'questionarios',
