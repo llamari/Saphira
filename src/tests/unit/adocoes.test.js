@@ -1,6 +1,6 @@
 import { describe, jest, test, afterEach } from '@jest/globals';
 import PedidoAdocao from '../../models/PedidoAdocao';
-import { postAdocoes } from '../../controllers/adocoesControllers';
+import { postAdocoes } from '../../controllers/adocoes.controller.js';
 
 jest.mock('../../models/PedidoAdocao', () => ({
     __esModule: true, // para garantir compatibilidade ESM se usar import/export
