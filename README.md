@@ -1,4 +1,11 @@
 # Saphira
+**INTEGRANTES:**
+Beatriz Vinguerti Xavier,
+Felipe Hiroshi Carvalho Dinnouti,
+Gabriel Ziani Alves,
+Sara Lamari Silva,
+Vitor Paiva Nunes de Paula
+
 **SARA** | POST /animais ✓
 
 **BEEA** | GET /animais ✓
@@ -13,11 +20,11 @@
 
 **MAGUIRE** | POST /adocoes ✓ não testado
 
-**JAPONÊS** | GET /admin/animais ✓ não testado
+**JAPONÊS** | GET /admin/animais ✓
 
-**JAPONÊS** | PATCH /admin/animais/:id ✓ não testado
+**JAPONÊS** | PATCH /admin/animais/:id ✓ 
 
-**JAPONÊS** | DELETE /admin/animais/:id ✓ não testado
+**JAPONÊS** | DELETE /admin/animais/:id ✓
 
 **BEEA** | GET /animais/:id 
 
