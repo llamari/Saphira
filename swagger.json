@@ -1,0 +1,110 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Saphira",
+        "version": "1.0.0",
+        "description": "Documentação da API Saphira, uma API RESTful para gerenciamento de adoção de animais."
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5000",
+            "description": "Servidor local da API Saphira"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Animais",
+            "description": "Operações relacionadas a animais"
+        },
+        {
+            "name": "Usuários",
+            "description": "Operações relacionadas a usuários"
+        },
+        {
+            "name": "Adoções",
+            "description": "Operações relacionadas a adoções"
+        },
+        {
+            "name": "Admin",
+            "description": "Operações específicas apenas para pessoas com um nível de autorizaçã maior"
+        },
+        {
+            "name": "Login",
+            "description": "Operações de autenticação e login"
+        },
+        {
+            "name": "Questionário",
+            "description": "Operação relacionada ao questionário de adoção, que o tutor deve preencher antes de adotar um animal"
+        }
+    ],
+    "paths": {
+        "getAnimals": {
+            "get": {
+                "tags": [
+                    "Animais"
+                ],
+                "summary": "Listar todos os animais",
+                "description": "Retorna uma lista de todos os animais disponíveis para adoção.",
+                "responses": {
+                    "201": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Animal"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar animais",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "getAnimalsId": {
+            "get": {
+                "tags": [
+                    "Animais"
+                ],
+                "summary": "Retorna animal específico",
+                "description": "Retorna o animal específico de acordo com o Id.",
+                "responses": {
+                    "201": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Animal"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro inesperado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

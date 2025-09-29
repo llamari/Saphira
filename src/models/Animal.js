@@ -42,6 +42,14 @@ export const Animal = sequelizeDatabase.define('Animal', {
     foto: {
         type: DataTypes.BLOB('long'),
         allowNull: true
+    },
+    createdAt:{
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date()
+    },
+    updatedAt:{
+        type: DataTypes.DATE,
     }
 }, {
     tableName: 'animais',

@@ -26,6 +26,14 @@ const PedidoAdocao = sequelizeDatabase.define('PedidoAdocao', {
         type: DataTypes.UUID,
         allowNull: false,
         unique: true
+    },
+    createdAt:{
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date()
+    },
+    updatedAt:{
+        type: DataTypes.DATE,
     }
 }, {
     tableName: 'pedidos_adocao',

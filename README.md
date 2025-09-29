@@ -20,11 +20,11 @@ Vitor Paiva Nunes de Paula
 
 **MAGUIRE** | POST /adocoes ✓ não testado
 
-**JAPONÊS** | GET /admin/animais ✓ não testado
+**JAPONÊS** | GET /admin/animais ✓
 
-**JAPONÊS** | PATCH /admin/animais/:id ✓ não testado
+**JAPONÊS** | PATCH /admin/animais/:id ✓ 
 
-**JAPONÊS** | DELETE /admin/animais/:id ✓ não testado
+**JAPONÊS** | DELETE /admin/animais/:id ✓
 
 **BEEA** | GET /animais/:id 
 

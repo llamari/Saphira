@@ -28,6 +28,14 @@ const Doacao = sequelizeDatabase.define('doacao', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    createdAt:{
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date()
+    },
+    updatedAt:{
+        type: DataTypes.DATE,
+    }
 }, {
     tableName: 'Doacao',
     timestamps: true
