@@ -1,5 +1,6 @@
 import { sequelizeDatabase } from "./db.js"
 import express from "express";
+import "dotenv/config"; // if you're using ES modules
 
 // Importing routes
 import adocoes from "./src/routes/adocoes.routes.js";
@@ -23,17 +24,19 @@ app.use(express.json({ limit: '50mb' }));
 
 app.get('/', (req, res) => res.send("API da Saphira rodando!"))
 
+app.post('/login', login);
+
+
 // Registering Routes
 app.use(adocoes);
 app.use(animais);
 app.use(doacoes);
+
 app.use(questionario);
 app.use(users);
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, '0.0.0.0', () => {
-    
-    
     console.log(`Servidor rodando na porta ${PORT}`);
 });

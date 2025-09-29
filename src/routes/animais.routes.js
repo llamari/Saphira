@@ -1,4 +1,5 @@
 import e from "express";
+
 import { deleteAnimal, GetAnimals, GetAnimalsId, listAnimals, postAnimal, updateAnimal } from "../controllers/animais.controller";
 
 const animais = e.Router();
