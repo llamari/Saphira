@@ -1,6 +1,6 @@
 import { sequelizeDatabase } from "./db.js"
 import express from "express";
-import "dotenv/config"; // if you're using ES modules
+import "dotenv/config";
 
 // Importing routes
 import adocoes from "./src/routes/adocoes.routes.js";

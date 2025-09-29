@@ -1,5 +1,7 @@
 import Usuario from "../models/Usuario.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken"
+import "dotenv/config"
 
 export const GetUsers = async (req, res) => {
     try {
@@ -43,7 +45,7 @@ export const PostUsers = async (req, res) => {
         res.status(201).json(newUser);
     } 
     catch (error) {
-        console.error('Erro', error);
+        console.log('Erro', error);
         return res.status(500).json({ erro: "Erro interno ao cadastrar o tutor." });
     }
 };
@@ -73,14 +75,28 @@ export const PatchUsersId = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
+        const JWT_SECRET = process.env.JWT_SECRET;
         const { email, senha } = req.body;
         const user = await Usuario.findOne({ where: { email: email } })
-        if (user && user.senha === senha) {
-            res.send('Login bem sucedido')
+
+        let passwordMatch = false
+
+        if (user) {
+            passwordMatch = await bcrypt.compare(senha, user.senha);  
+        }
+
+
+        if (user && passwordMatch) {
+            const username = user.username
+            const adminstrator = user.administrador     
+
+            const token = jwt.sign({ username, adminstrator }, JWT_SECRET, { expiresIn: "1h" });
+            res.send({"mensagem": 'Login bem sucedido', "token": token})
         } else {
-            res.send({ "erro": "Email ou senha inválidos." })
+            res.send({ "erro": "Email ou senha inválidos."})
         }
     } catch (error) {
-        res.send({"erro": "Erro interno ao tentar fazer o login."})
+        console.error(error)
+        res.status(500).send({"erro": "Erro interno ao tentar fazer o login."})
     }
 }

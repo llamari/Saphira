@@ -222,7 +222,7 @@ describe('Teste dos animais', () => {
         expect(res.send).toHaveBeenCalledWith("Erro ao atualizar animal");
     });
 
-    test('deve deletar o animal e retornar 204', async () => {
+    test('deve deletar o animal e retornar 200', async () => {
         const req = mockRequestOnlyParams({ id: '1' });
         const res = mockResponse();
 
@@ -231,7 +231,7 @@ describe('Teste dos animais', () => {
         await deleteAnimalHandler(req, res);
 
         expect(Animal.destroy).toHaveBeenCalledWith({ where: { id: '1' } });
-        expect(res.status).toHaveBeenCalledWith(204);
+        expect(res.status).toHaveBeenCalledWith(200);
         expect(res.send).toHaveBeenCalledWith({ message: "Animal removido com sucesso" });
     });
 
@@ -277,7 +277,7 @@ describe('Teste dos animais', () => {
             order: [["createdAt", "DESC"]],
         }));
 
-        expect(res.status).toHaveBeenCalledWith(201);
+        expect(res.status).toHaveBeenCalledWith(200);
         expect(res.send).toHaveBeenCalledWith({ message: 'Sucesso', animais: mockAnimals });
     });
 

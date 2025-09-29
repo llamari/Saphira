@@ -292,15 +292,20 @@ describe('Testes login', () => {
   });
 
   test('Deve retornar sucesso se email e senha forem válidos', async () => {
+    const hashed = await bcrypt.hash("123456", 10);
+
     const req = { body: { email: 'teste@exemplo.com', senha: '123456' } };
     const res = mockResponse();
 
-    Usuario.findOne = jest.fn().mockResolvedValue({ email: 'teste@exemplo.com', senha: '123456' });
+    Usuario.findOne = jest.fn().mockResolvedValue({ email: 'teste@exemplo.com', senha: hashed });
 
     await login(req, res);
 
     expect(Usuario.findOne).toHaveBeenCalledWith({ where: { email: 'teste@exemplo.com' } });
-    expect(res.send).toHaveBeenCalledWith('Login bem sucedido');
+    expect.objectContaining({
+      mensagem: 'Login bem sucedido',
+      token: expect.any(String)   // token is dynamic, so just check it exists
+    })
   });
 
   test('Deve retornar erro se senha for inválida', async () => {

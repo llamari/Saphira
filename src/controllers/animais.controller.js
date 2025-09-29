@@ -62,7 +62,7 @@ export const GetAnimals = async (req, res) => {
 
         res.status(200).send({ message: 'Sucesso', animais });
     } catch (error) {
-        console.error({ message: 'Erro', error });
+        console.log({ message: 'Erro', error });
         return res.status(500).json({ error: 'Erro ao buscar animais' });
     }
 };
@@ -79,7 +79,7 @@ export const GetAnimalsId = async (req, res) => {
 
         res.status(201).json({ message: "Sucesso", animal });
     } catch (error) {
-        console.error("Erro ao buscar animal:", error);
+        console.log("Erro ao buscar animal:", error);
         return res.status(500).json({ error: "Erro ao buscar animal" });
     }
 };
@@ -94,7 +94,7 @@ export const postAnimal = [upload.single('foto'), async (req, res) => {
         descricao
     } = req.body;
 
-    const foto = req.foto ? req.foto === undefined : null;
+    const foto = req.file
 
     if (!nome || !especie || !porte || (castrado !== false && castrado !== true) || (vacinado !== false && vacinado !== true) || !descricao) return res.status(400).send({ "erro": "Todos os campos obrigatórios devem ser preenchidos corretamente." })
 
@@ -106,7 +106,7 @@ export const postAnimal = [upload.single('foto'), async (req, res) => {
             castrado,
             vacinado,
             descricao,
-            foto: foto
+            foto: foto.buffer
         })
         return res.send({ animal })
     } catch (error) {
