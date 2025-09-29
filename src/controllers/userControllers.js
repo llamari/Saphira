@@ -29,7 +29,7 @@ export const GetUsersId = async (req, res) => {
 export const PostUsers = async (req, res) => {
     try {
         const { nome_completo, email, senha, cidade, estado, idade, telefone, celular, cpf, endereco, bairro, cep, instagram, facebook, administrador } = req.body;
-        if (!nome_completo || !email || !senha || !cidade || !estado || !idade || !telefone || !celular || !cpf || !endereco || !bairro || !cep || !instagram || !facebook || !administrador) {
+        if (!nome_completo || !email || !senha || !cidade || !estado || !idade || !telefone || !celular || !cpf || !endereco || !bairro || !cep || !instagram || !facebook || administrador === undefined) {
             return res.status(400).json({ error: "Preencha todos os campos." });
         }
 

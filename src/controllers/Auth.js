@@ -1,4 +1,5 @@
 import Usuario from "../models/Usuario.js";
+import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -17,6 +18,7 @@ export const login = async (req, res) => {
             res.send({ "erro": "Email ou senha inválidos." })
         }
     } catch (error) {
-        res.send({"erro": "Erro interno ao tentar fazer o login."})
+        res.status(500).send({"erro": "Erro interno ao tentar fazer o login."})
+        console.log(error)
     }
 }
