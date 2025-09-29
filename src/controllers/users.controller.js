@@ -7,7 +7,6 @@ export const GetUsers = async (req, res) => {
         res.status(200).json(users);
     }
     catch (error) {
-        console.error('Erro', error);
         return res.status(500).json({ erro: 'Erro ao buscar dados dos tutores' });
     }
 };
@@ -22,7 +21,6 @@ export const GetUsersId = async (req, res) => {
         res.status(200).json(user);
     }
     catch (error) {
-        console.error('Erro', error);
         return res.status(500).json({ erro: 'Erro ao buscar dados do tutor' });
     }
 };
@@ -42,7 +40,6 @@ export const PostUsers = async (req, res) => {
         const hashedPassword = await bcrypt.hash(senha, 10);
 
         const newUser = await Usuario.create({ nome_completo, email, senha: hashedPassword, cidade, estado, idade, telefone, celular, cpf, endereco, bairro, cep, instagram, facebook, administrador });
-        console.log(newUser);
         res.status(201).json(newUser);
     } 
     catch (error) {
@@ -73,3 +70,17 @@ export const PatchUsersId = async (req, res) => {
         return res.status(500).json({ erro: 'Erro ao atualizar os dados do tutor' });
     }
 };
+
+export const login = async (req, res) => {
+    try {
+        const { email, senha } = req.body;
+        const user = await Usuario.findOne({ where: { email: email } })
+        if (user && user.senha === senha) {
+            res.send('Login bem sucedido')
+        } else {
+            res.send({ "erro": "Email ou senha inválidos." })
+        }
+    } catch (error) {
+        res.send({"erro": "Erro interno ao tentar fazer o login."})
+    }
+}
