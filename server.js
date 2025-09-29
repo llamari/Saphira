@@ -24,14 +24,11 @@ app.use(express.json({ limit: '50mb' }));
 
 app.get('/', (req, res) => res.send("API da Saphira rodando!"))
 
-app.post('/login', login);
-
 
 // Registering Routes
 app.use(adocoes);
 app.use(animais);
 app.use(doacoes);
-
 app.use(questionario);
 app.use(users);
 

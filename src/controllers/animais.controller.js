@@ -3,12 +3,13 @@ import multer from "multer";
 const upload = multer();
 import { Op, fn, col, where } from "sequelize";
 
+// User oriented - returns animals available for adoption
 export const GetAnimals = async (req, res) => {
     try {
-        //Filtro de busca
+        // Search filters
         let { especie, porte, castrado, vacinado, sort } = req.query;
 
-        // função auxiliar para limpar aspas e espaços
+        // Helper function to clean spaces and quotes
         const cleanStr = (v) =>
             typeof v === "string" ? v.replace(/^["']|["']$/g, "").trim() : v;
 
@@ -18,7 +19,7 @@ export const GetAnimals = async (req, res) => {
 
         const whereConditions = [];
 
-        // filtro parcial e case-insensitive
+        // Case insensitive and partial filter
         if (especie) {
             whereConditions.push(
                 where(fn("LOWER", col("especie")), {
@@ -46,10 +47,12 @@ export const GetAnimals = async (req, res) => {
         const whereClause =
             whereConditions.length > 0 ? { [Op.and]: whereConditions } : {};
 
+
         //Ordenação
-        let order = [["createdAt", "ASC"]]; // padrão = mais antigo primeiro
+
+        let order = [["createdAt", "ASC"]]; // Default - Oldest first
         if (sort === "recentes") {
-            order = [["createdAt", "DESC"]]; // mais recente primeiro
+            order = [["createdAt", "DESC"]]; // Otherwise, use newer first
         }
 
         const animais = await Animal.findAll({
@@ -57,7 +60,7 @@ export const GetAnimals = async (req, res) => {
             order: order
         });
 
-        res.status(201).send({ message: 'Sucesso', animais });
+        res.status(200).send({ message: 'Sucesso', animais });
     } catch (error) {
         console.error({ message: 'Erro', error });
         return res.status(500).json({ error: 'Erro ao buscar animais' });
@@ -91,7 +94,7 @@ export const postAnimal = [upload.single('foto'), async (req, res) => {
         descricao
     } = req.body;
 
-    const foto = req.file;
+    const foto = req.foto ? req.foto === undefined : null;
 
     if (!nome || !especie || !porte || (castrado !== false && castrado !== true) || (vacinado !== false && vacinado !== true) || !descricao) return res.status(400).send({ "erro": "Todos os campos obrigatórios devem ser preenchidos corretamente." })
 
@@ -103,10 +106,11 @@ export const postAnimal = [upload.single('foto'), async (req, res) => {
             castrado,
             vacinado,
             descricao,
-            foto: foto.buffer
+            foto: foto
         })
         return res.send({ animal })
     } catch (error) {
+        console.log(error)
         return res.status(500).send({ "erro": "Erro interno ao cadastrar o animal." });
     }
 
@@ -115,6 +119,7 @@ export const postAnimal = [upload.single('foto'), async (req, res) => {
 
 export const listAnimals = async (req, res) => {
     try {
+        // TODO: Add filters
         const animals = await Animal.findAll();
         res.status(200).send({data: animals, total: animals.length})
     } catch (error) {
@@ -167,7 +172,7 @@ export const deleteAnimal = async (req, res) => {
             return res.status(404).send({erro: "Animal não encontrado"})
         }
 
-        return res.status(204).send({message: "Animal removido com sucesso"})
+        return res.status(200).send({message: "Animal removido com sucesso"})
     } catch {
         return res.status(500).send({erro: "Erro ao remover animal"})
     }
