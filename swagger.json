@@ -35,6 +35,10 @@
         {
             "name": "Questionário",
             "description": "Operação relacionada ao questionário de adoção, que o tutor deve preencher antes de adotar um animal"
+        },
+        {
+            "name": "Doações",
+            "description": "Operações relacionadas a doações para a ONG"
         }
     ],
     "paths": {
@@ -43,17 +47,72 @@
                 "tags": [
                     "Animais"
                 ],
-                "summary": "Listar todos os animais",
-                "description": "Retorna uma lista de todos os animais disponíveis para adoção.",
+                "summary": "Lista todos os animais disponíveis para adoção",
+                "description": "Retorna uma lista de todos os animais disponíveis para adoção, com filtros opcionais.",
+                "parameters": [
+                    {
+                        "name": "especie",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Filtra por espécie"
+                    },
+                    {
+                        "name": "porte",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Filtra por porte"
+                    },
+                    {
+                        "name": "castrado",
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        },
+                        "description": "Filtra por castrado"
+                    },
+                    {
+                        "name": "vacinado",
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        },
+                        "description": "Filtra por vacinado"
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "recentes",
+                                "antigos"
+                            ]
+                        },
+                        "description": "Ordenação por data de cadastro"
+                    }
+                ],
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "Sucesso",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Animal"
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sucesso"
+                                        },
+                                        "animais": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/getAnimais"
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -79,22 +138,49 @@
                 ],
                 "summary": "Retorna animal específico",
                 "description": "Retorna o animal específico de acordo com o Id.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "ID do animal"
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "Sucesso",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Animal"
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sucesso"
+                                        },
+                                        "animal": {
+                                            "$ref": "#/components/schemas/getAnimais"
+                                        }
                                     }
                                 }
                             }
                         }
                     },
+                    "404": {
+                        "description": "Animal não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
                     "500": {
-                        "description": "Erro inesperado",
+                        "description": "Erro ao buscar animal",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -118,23 +204,29 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "$ref": "#/components/schemas/Animal"
+                                "$ref": "#/components/schemas/postAnimalRequest"
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
+                        "description": "Sucesso",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Animal"
+                                    "type": "object",
+                                    "properties": {
+                                        "animal": {
+                                            "$ref": "#/components/schemas/postAnimalResponse"
+                                        }
+                                    }
                                 }
                             }
                         }
                     },
                     "400": {
-                        "description": "Todos os campos obrigatórios devem ser preenchidos corretamente.",
+                        "description": "Todos os campos obrigatórios devem ser preenchidos corretamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -144,7 +236,7 @@
                         }
                     },
                     "500": {
-                        "description": "Erro interno ao cadastrar o animal.",
+                        "description": "Erro interno ao cadastrar o animal",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -156,13 +248,56 @@
                 }
             }
         },
-        "/animais/{id}": {
+        "/admin/animais": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Lista todos os animais (admin)",
+                "description": "Retorna todos os animais cadastrados no sistema (admin).",
+                "responses": {
+                    "200": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/getAnimais"
+                                            }
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 10
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar animais",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/animais/{id}": {
             "patch": {
                 "tags": [
-                    "Animais"
+                    "Admin"
                 ],
-                "summary": "Atualizar informações de um animal",
-                "description": "Atualiza os dados de um animal específico.",
+                "summary": "Atualizar informações de um animal (admin)",
+                "description": "Atualiza os dados de um animal específico (admin).",
                 "parameters": [
                     {
                         "name": "id",
@@ -179,22 +314,33 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Animal"
+                                "$ref": "#/components/schemas/updateAnimalRequest"
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
+                        "description": "Animal atualizado com sucesso",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Animal"
+                                    "$ref": "#/components/schemas/updateAnimalResponse"
                                 }
                             }
                         }
                     },
                     "404": {
+                        "description": "Animal não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
                         "description": "Nenhum campo foi fornecido para atualização",
                         "content": {
                             "application/json": {
@@ -218,10 +364,10 @@
             },
             "delete": {
                 "tags": [
-                    "Animais"
+                    "Admin"
                 ],
-                "summary": "Remover um animal",
-                "description": "Remove um animal específico do sistema.",
+                "summary": "Remover um animal (admin)",
+                "description": "Remove um animal específico do sistema (admin).",
                 "parameters": [
                     {
                         "name": "id",
@@ -234,8 +380,21 @@
                     }
                 ],
                 "responses": {
-                    "204": {
-                        "description": "Animal removido com sucesso"
+                    "200": {
+                        "description": "Animal removido com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Animal removido com sucesso"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                     "404": {
                         "description": "Animal não encontrado",
@@ -256,6 +415,1258 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/tutores": {
+            "get": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Lista todos os tutores",
+                "description": "Retorna todos os tutores cadastrados.",
+                "responses": {
+                    "200": {
+                        "description": "Lista de tutores retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Tutor"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar dados dos tutores",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Cadastrar um novo tutor",
+                "description": "Cadastra um novo tutor no sistema.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PostTutorRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tutor cadastrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tutor"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Todos os campos obrigatórios devem ser preenchidos corretamente ou email já utilizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno ao cadastrar o tutor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tutores/{id}": {
+            "get": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Retorna tutor específico",
+                "description": "Retorna os dados de um tutor específico pelo ID.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "ID do tutor"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tutor encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tutor"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tutor não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar dados do tutor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Usuários"
+                ],
+                "summary": "Atualizar dados do tutor",
+                "description": "Atualiza os dados de um tutor específico.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "ID do tutor"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatchTutorRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tutor atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuário atualizado com sucesso"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/Tutor"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Pelo menos um campo deve ser enviado para atualização",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tutor não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao atualizar os dados do tutor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Autenticação de tutor",
+                "description": "Realiza login do tutor e retorna um token JWT.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login bem sucedido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "mensagem": {
+                                            "type": "string",
+                                            "example": "Login bem sucedido"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Email ou senha inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno ao tentar fazer o login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/adocoes": {
+            "post": {
+                "tags": [
+                    "Adoções"
+                ],
+                "summary": "Registrar pedido de adoção",
+                "description": "Registra um novo pedido de adoção de animal.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "tutor_id",
+                                    "animal_id",
+                                    "status",
+                                    "posicao_fila"
+                                ],
+                                "properties": {
+                                    "tutor_id": {
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "animal_id": {
+                                        "type": "string",
+                                        "example": "64a7f0c8e4b0c8a1b2c3d4e5"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "example": "pendente"
+                                    },
+                                    "posicao_fila": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Pedido de adoção registrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "example": "abc123"
+                                        },
+                                        "tutorId": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "animalId": {
+                                            "type": "string",
+                                            "example": "64a7f0c8e4b0c8a1b2c3d4e5"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "pendente"
+                                        },
+                                        "posicao_fila": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "O tutor ainda não respondeu o questionário obrigatório",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Este tutor já tem um pedido de adoção para este animal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Tutor ou animal não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao registrar o pedido de adoção",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/questionario": {
+            "post": {
+                "tags": [
+                    "Questionário"
+                ],
+                "summary": "Registrar resposta do questionário de adoção",
+                "description": "Registra as respostas do questionário obrigatório para adoção.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/QuestionarioRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Questionário registrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/QuestionarioRequest"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao registrar o pedido de adoção",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/doacoes": {
+            "post": {
+                "tags": [
+                    "Doações"
+                ],
+                "summary": "Registrar doação e gerar QR Code Pix",
+                "description": "Registra uma doação e retorna o QR Code Pix para pagamento.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "nome",
+                                    "email",
+                                    "valor",
+                                    "mensagem"
+                                ],
+                                "properties": {
+                                    "nome": {
+                                        "type": "string",
+                                        "example": "João"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "joao@email.com"
+                                    },
+                                    "valor": {
+                                        "type": "number",
+                                        "example": 50.0
+                                    },
+                                    "mensagem": {
+                                        "type": "string",
+                                        "example": "Ajuda para os animais!"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Doação registrada e QR Code gerado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "doação_id": {
+                                            "type": "string",
+                                            "example": "123"
+                                        },
+                                        "nome": {
+                                            "type": "string",
+                                            "example": "João"
+                                        },
+                                        "valor": {
+                                            "type": "number",
+                                            "example": 50.0
+                                        },
+                                        "mensagem": {
+                                            "type": "string",
+                                            "example": "Ajuda para os animais!"
+                                        },
+                                        "linkPix": {
+                                            "type": "string",
+                                            "example": "000201..."
+                                        },
+                                        "qrcode": {
+                                            "type": "string",
+                                            "example": "data:image/png;base64,..."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Valor da doação é obrigatório e deve ser um número positivo",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao processar a doação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "getAnimais": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "64a7f0c8e4b0c8a1b2c3d4e5"
+                    },
+                    "nome": {
+                        "type": "string",
+                        "example": "Rex"
+                    },
+                    "especie": {
+                        "type": "string",
+                        "example": "Cachorro"
+                    },
+                    "raca": {
+                        "type": "string",
+                        "example": "Labrador"
+                    },
+                    "idade": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "porte": {
+                        "type": "string",
+                        "example": "Grande"
+                    },
+                    "castrado": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "vacinado": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "descricao": {
+                        "type": "string",
+                        "example": "Um cachorro amigável e brincalhão."
+                    },
+                    "fotoUrl": {
+                        "type": "string",
+                        "example": "http://localhost:5000/uploads/rex.jpg"
+                    },
+                    "dataCadastro": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-07-01T12:00:00Z"
+                    }
+                }
+            },
+            "postAnimalRequest": {
+                "type": "object",
+                "properties": {
+                    "nome": {
+                        "type": "string",
+                        "example": "Rex"
+                    },
+                    "especie": {
+                        "type": "string",
+                        "example": "Cachorro"
+                    },
+                    "raca": {
+                        "type": "string",
+                        "example": "Labrador"
+                    },
+                    "idade": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "porte": {
+                        "type": "string",
+                        "example": "Grande"
+                    },
+                    "castrado": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "vacinado": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "descricao": {
+                        "type": "string",
+                        "example": "Um cachorro amigável e brincalhão."
+                    },
+                    "foto": {
+                        "type": "string",
+                        "format": "buffer",
+                        "description": "Arquivo de imagem do animal"
+                    }
+                },
+                "required": [
+                    "nome",
+                    "especie",
+                    "raca",
+                    "idade",
+                    "porte",
+                    "castrado",
+                    "vacinado",
+                    "descricao",
+                    "foto"
+                ]
+            },
+            "postAnimalResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "64a7f0c8e4b0c8a1b2c3d4e5"
+                    },
+                    "nome": {
+                        "type": "string",
+                        "example": "Rex"
+                    },
+                    "especie": {
+                        "type": "string",
+                        "example": "Cachorro"
+                    },
+                    "raca": {
+                        "type": "string",
+                        "example": "Labrador"
+                    },
+                    "idade": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "porte": {
+                        "type": "string",
+                        "example": "Grande"
+                    },
+                    "castrado": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "vacinado": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "descricao": {
+                        "type": "string",
+                        "example": "Um cachorro amigável e brincalhão."
+                    },
+                    "fotoUrl": {
+                        "type": "string",
+                        "example": "http://localhost:5000/uploads/rex.jpg"
+                    },
+                    "dataCadastro": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-07-01T12:00:00Z"
+                    }
+                }
+            },
+            "Error": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Erro"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Internal server error"
+                    }
+                }
+            },
+            "updateAnimalRequest": {
+                "type": "object",
+                "properties": {
+                    "nome": {
+                        "type": "string",
+                        "example": "Mimi"
+                    },
+                    "especie": {
+                        "type": "string",
+                        "example": "Gato"
+                    },
+                    "raca": {
+                        "type": "string",
+                        "example": "Persa"
+                    },
+                    "idade": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "porte": {
+                        "type": "string",
+                        "example": "Pequeno"
+                    },
+                    "castrado": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "vacinado": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "descricao": {
+                        "type": "string",
+                        "example": "Uma gatinha fofinha e meiga."
+                    },
+                    "foto": {
+                        "type": "string",
+                        "format": "buffer",
+                        "description": "Arquivo de imagem do animal"
+                    }
+                },
+                "required": [
+                    "nome",
+                    "especie",
+                    "raca",
+                    "idade",
+                    "porte",
+                    "castrado",
+                    "vacinado",
+                    "descricao"
+                ]
+            },
+            "updateAnimalResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "64a7f0c8e4b0c8a1b2c3d4e5"
+                    },
+                    "nome": {
+                        "type": "string",
+                        "example": "Mimi"
+                    },
+                    "especie": {
+                        "type": "string",
+                        "example": "Gato"
+                    },
+                    "raca": {
+                        "type": "string",
+                        "example": "Persa"
+                    },
+                    "idade": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "porte": {
+                        "type": "string",
+                        "example": "Pequeno"
+                    },
+                    "castrado": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "vacinado": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "descricao": {
+                        "type": "string",
+                        "example": "Uma gatinha fofinha e meiga."
+                    },
+                    "fotoUrl": {
+                        "type": "string",
+                        "example": "http://localhost:5000/uploads/mimi.jpg"
+                    },
+                    "dataCadastro": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-07-01T12:00:00Z"
+                    }
+                }
+            },
+            "Tutor": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "1"
+                    },
+                    "nome_completo": {
+                        "type": "string",
+                        "example": "Maria Silva"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "maria@email.com"
+                    },
+                    "cidade": {
+                        "type": "string",
+                        "example": "São Paulo"
+                    },
+                    "estado": {
+                        "type": "string",
+                        "example": "SP"
+                    },
+                    "idade": {
+                        "type": "integer",
+                        "example": 30
+                    },
+                    "telefone": {
+                        "type": "string",
+                        "example": "11999999999"
+                    },
+                    "celular": {
+                        "type": "string",
+                        "example": "11988888888"
+                    },
+                    "cpf": {
+                        "type": "string",
+                        "example": "12345678900"
+                    },
+                    "endereco": {
+                        "type": "string",
+                        "example": "Rua das Flores, 123"
+                    },
+                    "bairro": {
+                        "type": "string",
+                        "example": "Centro"
+                    },
+                    "cep": {
+                        "type": "string",
+                        "example": "01000-000"
+                    },
+                    "instagram": {
+                        "type": "string",
+                        "example": "@maria"
+                    },
+                    "facebook": {
+                        "type": "string",
+                        "example": "facebook.com/maria"
+                    },
+                    "administrador": {
+                        "type": "boolean",
+                        "example": false
+                    }
+                }
+            },
+            "PostTutorRequest": {
+                "type": "object",
+                "required": [
+                    "nome_completo",
+                    "email",
+                    "senha",
+                    "cidade",
+                    "estado",
+                    "idade",
+                    "telefone"
+                ],
+                "properties": {
+                    "nome_completo": {
+                        "type": "string",
+                        "example": "Maria Silva"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "maria@email.com"
+                    },
+                    "senha": {
+                        "type": "string",
+                        "example": "senhaSegura123"
+                    },
+                    "cidade": {
+                        "type": "string",
+                        "example": "São Paulo"
+                    },
+                    "estado": {
+                        "type": "string",
+                        "example": "SP"
+                    },
+                    "idade": {
+                        "type": "integer",
+                        "example": 30
+                    },
+                    "telefone": {
+                        "type": "string",
+                        "example": "11999999999"
+                    },
+                    "celular": {
+                        "type": "string",
+                        "example": "11988888888"
+                    },
+                    "cpf": {
+                        "type": "string",
+                        "example": "12345678900"
+                    },
+                    "endereco": {
+                        "type": "string",
+                        "example": "Rua das Flores, 123"
+                    },
+                    "bairro": {
+                        "type": "string",
+                        "example": "Centro"
+                    },
+                    "cep": {
+                        "type": "string",
+                        "example": "01000-000"
+                    },
+                    "instagram": {
+                        "type": "string",
+                        "example": "@maria"
+                    },
+                    "facebook": {
+                        "type": "string",
+                        "example": "facebook.com/maria"
+                    },
+                    "administrador": {
+                        "type": "boolean",
+                        "example": false
+                    }
+                }
+            },
+            "PatchTutorRequest": {
+                "type": "object",
+                "properties": {
+                    "nome_completo": {
+                        "type": "string",
+                        "example": "Maria Silva"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "maria@email.com"
+                    },
+                    "senha": {
+                        "type": "string",
+                        "example": "novaSenha123"
+                    },
+                    "cidade": {
+                        "type": "string",
+                        "example": "São Paulo"
+                    },
+                    "estado": {
+                        "type": "string",
+                        "example": "SP"
+                    },
+                    "idade": {
+                        "type": "integer",
+                        "example": 31
+                    },
+                    "telefone": {
+                        "type": "string",
+                        "example": "11999999999"
+                    },
+                    "celular": {
+                        "type": "string",
+                        "example": "11988888888"
+                    },
+                    "cpf": {
+                        "type": "string",
+                        "example": "12345678900"
+                    },
+                    "endereco": {
+                        "type": "string",
+                        "example": "Rua das Flores, 123"
+                    },
+                    "bairro": {
+                        "type": "string",
+                        "example": "Centro"
+                    },
+                    "cep": {
+                        "type": "string",
+                        "example": "01000-000"
+                    },
+                    "instagram": {
+                        "type": "string",
+                        "example": "@maria"
+                    },
+                    "facebook": {
+                        "type": "string",
+                        "example": "facebook.com/maria"
+                    },
+                    "administrador": {
+                        "type": "boolean",
+                        "example": false
+                    }
+                }
+            },
+            "LoginRequest": {
+                "type": "object",
+                "required": [
+                    "email",
+                    "senha"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "maria@email.com"
+                    },
+                    "senha": {
+                        "type": "string",
+                        "example": "senhaSegura123"
+                    }
+                }
+            },
+            "QuestionarioRequest": {
+                "type": "object",
+                "required": [
+                    "quantos_animais_possui",
+                    "motivos_para_adotar",
+                    "quem_vai_sustentar_o_animal",
+                    "numero_adultos_na_casa",
+                    "numero_criancas_na_casa",
+                    "residencia_tipo",
+                    "proprietario_permite_animais",
+                    "todos_de_acordo_com_adocao",
+                    "responsavel_pelo_animal",
+                    "responsavel_concorda_com_adocao",
+                    "ha_alergico_ou_pessoas_que_nao_gostam",
+                    "gasto_mensal_estimado",
+                    "valor_disponivel_no_orcamento",
+                    "tipo_alimentacao",
+                    "local_que_o_animal_vai_ficar",
+                    "forma_de_permanencia",
+                    "forma_de_confinamento",
+                    "tera_brinquedos",
+                    "tera_abrigo",
+                    "tera_passeios_acompanhado",
+                    "tera_passeios_sozinho",
+                    "companhia_outro_animal",
+                    "companhia_humana_24h",
+                    "companhia_humana_parcial",
+                    "sem_companhia_humana",
+                    "sem_companhia_animal",
+                    "o_que_faz_em_viagem",
+                    "o_que_faz_se_fugir",
+                    "o_que_faz_se_nao_puder_criar",
+                    "animais_que_ja_criou",
+                    "destino_animais_anteriores",
+                    "costuma_esterilizar",
+                    "costuma_vacinar",
+                    "costuma_vermifugar",
+                    "veterinario_usual",
+                    "forma_de_educar",
+                    "envia_fotos_e_videos_do_local",
+                    "aceita_visitas_e_fotos_do_animal",
+                    "topa_entrar_grupo_adotantes",
+                    "concorda_com_taxa_adocao",
+                    "data_disponivel_para_buscar_animal"
+                ],
+                "properties": {
+                    "empregado": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "quantos_animais_possui": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "motivos_para_adotar": {
+                        "type": "string",
+                        "example": "Companhia"
+                    },
+                    "quem_vai_sustentar_o_animal": {
+                        "type": "string",
+                        "example": "Eu"
+                    },
+                    "numero_adultos_na_casa": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "numero_criancas_na_casa": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "idades_criancas": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "example": [
+                            5
+                        ]
+                    },
+                    "residencia_tipo": {
+                        "type": "string",
+                        "example": "Apartamento"
+                    },
+                    "proprietario_permite_animais": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "todos_de_acordo_com_adocao": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "responsavel_pelo_animal": {
+                        "type": "string",
+                        "example": "Eu"
+                    },
+                    "responsavel_concorda_com_adocao": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "ha_alergico_ou_pessoas_que_nao_gostam": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "gasto_mensal_estimado": {
+                        "type": "integer",
+                        "example": 200
+                    },
+                    "valor_disponivel_no_orcamento": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "tipo_alimentacao": {
+                        "type": "string",
+                        "example": "Ração"
+                    },
+                    "local_que_o_animal_vai_ficar": {
+                        "type": "string",
+                        "example": "Dentro de casa"
+                    },
+                    "forma_de_permanencia": {
+                        "type": "string",
+                        "example": "Livre"
+                    },
+                    "forma_de_confinamento": {
+                        "type": "string",
+                        "example": "Nenhum"
+                    },
+                    "tera_brinquedos": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "tera_abrigo": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "tera_passeios_acompanhado": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "tera_passeios_sozinho": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "companhia_outro_animal": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "companhia_humana_24h": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "companhia_humana_parcial": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "sem_companhia_humana": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "sem_companhia_animal": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "o_que_faz_em_viagem": {
+                        "type": "string",
+                        "example": "Deixo com parente"
+                    },
+                    "o_que_faz_se_fugir": {
+                        "type": "string",
+                        "example": "Procuro imediatamente"
+                    },
+                    "o_que_faz_se_nao_puder_criar": {
+                        "type": "string",
+                        "example": "Procuro novo lar"
+                    },
+                    "animais_que_ja_criou": {
+                        "type": "string",
+                        "example": "Cachorro, gato"
+                    },
+                    "destino_animais_anteriores": {
+                        "type": "string",
+                        "example": "Ficaram comigo"
+                    },
+                    "costuma_esterilizar": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "costuma_vacinar": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "costuma_vermifugar": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "veterinario_usual": {
+                        "type": "string",
+                        "example": "Dr. Silva"
+                    },
+                    "forma_de_educar": {
+                        "type": "string",
+                        "example": "Reforço positivo"
+                    },
+                    "envia_fotos_e_videos_do_local": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "aceita_visitas_e_fotos_do_animal": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "topa_entrar_grupo_adotantes": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "concorda_com_taxa_adocao": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data_disponivel_para_buscar_animal": {
+                        "type": "string",
+                        "example": "2025-10-01"
                     }
                 }
             }
