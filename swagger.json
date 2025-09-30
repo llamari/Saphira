@@ -38,7 +38,7 @@
         }
     ],
     "paths": {
-        "getAnimals": {
+        "/getAnimais": {
             "get": {
                 "tags": [
                     "Animais"
@@ -72,7 +72,7 @@
                 }
             }
         },
-        "getAnimalsId": {
+        "/getAnimais/{id}": {
             "get": {
                 "tags": [
                     "Animais"
@@ -95,6 +95,160 @@
                     },
                     "500": {
                         "description": "Erro inesperado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/animais": {
+            "post": {
+                "tags": [
+                    "Animais"
+                ],
+                "summary": "Cadastrar um novo animal",
+                "description": "Cadastra um novo animal no sistema.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Animal"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Animal"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Todos os campos obrigatórios devem ser preenchidos corretamente.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno ao cadastrar o animal.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/animais/{id}": {
+            "patch": {
+                "tags": [
+                    "Animais"
+                ],
+                "summary": "Atualizar informações de um animal",
+                "description": "Atualiza os dados de um animal específico.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "ID do animal a ser atualizado"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Animal"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Animal"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Nenhum campo foi fornecido para atualização",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao atualizar animal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Animais"
+                ],
+                "summary": "Remover um animal",
+                "description": "Remove um animal específico do sistema.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "ID do animal a ser removido"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Animal removido com sucesso"
+                    },
+                    "404": {
+                        "description": "Animal não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao remover animal",
                         "content": {
                             "application/json": {
                                 "schema": {
