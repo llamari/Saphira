@@ -85,7 +85,6 @@ export const login = async (req, res) => {
             passwordMatch = await bcrypt.compare(senha, user.senha);  
         }
 
-
         if (user && passwordMatch) {
             const username = user.username
             const adminstrator = user.administrador     
@@ -96,7 +95,7 @@ export const login = async (req, res) => {
             res.send({ "erro": "Email ou senha inválidos."})
         }
     } catch (error) {
-        console.error(error)
+        console.error("Erro ", error)
         res.status(500).send({"erro": "Erro interno ao tentar fazer o login."})
     }
 }

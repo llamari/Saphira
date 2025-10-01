@@ -222,7 +222,7 @@ describe('Testes login', () => {
     const req = { body: userData };
     const res = mockResponse();
 
-    Usuario.create = jest.fn().mockRejectedValue(new Error("DB error"));
+    Usuario.create = jest.fn().mockRejectedValue(new Error("Mock DB error"));
 
     await PostUsers(req, res);
 
@@ -281,7 +281,7 @@ describe('Testes login', () => {
     const req = { params: { id: '1' }, body: { nome_completo: 'Novo Nome' } };
     const res = mockResponse();
 
-    Usuario.update = jest.fn().mockRejectedValue(new Error('DB crash'));
+    Usuario.update = jest.fn().mockRejectedValue(new Error('Mock DB crash'));
 
     await PatchUsersId(req, res);
 
@@ -335,6 +335,9 @@ describe('Testes login', () => {
     const res = mockResponse();
 
     Usuario.findOne = jest.fn().mockRejectedValue(new Error('DB error'));
+
+    // Mock console.error so it doesn't print and mark the test as failed.
+    jest.spyOn(console, 'error').mockImplementation(() => {});
 
     await login(req, res);
 
