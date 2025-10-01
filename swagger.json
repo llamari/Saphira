@@ -42,7 +42,7 @@
         }
     ],
     "paths": {
-        "/getAnimais": {
+        "/animais": {
             "get": {
                 "tags": [
                     "Animais"
@@ -129,9 +129,63 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Animais"
+                ],
+                "summary": "Cadastrar um novo animal",
+                "description": "Cadastra um novo animal no sistema.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/postAnimalRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "animal": {
+                                            "$ref": "#/components/schemas/postAnimalResponse"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Todos os campos obrigatórios devem ser preenchidos corretamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno ao cadastrar o animal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
-        "/getAnimais/{id}": {
+        "/animais/{id}": {
             "get": {
                 "tags": [
                     "Animais"
@@ -181,62 +235,6 @@
                     },
                     "500": {
                         "description": "Erro ao buscar animal",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/animais": {
-            "post": {
-                "tags": [
-                    "Animais"
-                ],
-                "summary": "Cadastrar um novo animal",
-                "description": "Cadastra um novo animal no sistema.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "$ref": "#/components/schemas/postAnimalRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "animal": {
-                                            "$ref": "#/components/schemas/postAnimalResponse"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Todos os campos obrigatórios devem ser preenchidos corretamente",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Erro interno ao cadastrar o animal",
                         "content": {
                             "application/json": {
                                 "schema": {
