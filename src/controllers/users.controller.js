@@ -90,7 +90,7 @@ export const login = async (req, res) => {
             const username = user.username
             const adminstrator = user.administrador     
 
-            const token = jwt.sign({ username, adminstrator }, JWT_SECRET, { expiresIn: "1h" });
+            const token = jwt.sign({ user: username, admin: adminstrator }, JWT_SECRET, { expiresIn: "1h" });
             res.send({"mensagem": 'Login bem sucedido', "token": token})
         } else {
             res.send({ "erro": "Email ou senha inválidos."})

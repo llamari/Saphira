@@ -27,11 +27,11 @@ app.get('/', (req, res) => res.send("API da Saphira rodando!"))
 
 
 // Registering Routes
-app.use(adocoes);
+app.use("/adocoes", adocoes);
 app.use("/animais", animais);
 app.use("/admin/animais", animais_admin)
-app.use(doacoes);
-app.use(questionario);
+app.use("/doacoes", doacoes);
+app.use("/questionario", questionario);
 app.use(users);
 
 const PORT = process.env.PORT || 5000;

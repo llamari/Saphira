@@ -85,7 +85,7 @@ export const GetAnimalsId = async (req, res) => {
 };
 
 export const postAnimal = [upload.single('foto'), async (req, res) => {
-    const {
+    let {
         nome,
         especie,
         porte,
@@ -95,6 +95,8 @@ export const postAnimal = [upload.single('foto'), async (req, res) => {
     } = req.body;
 
     const foto = req.file
+    castrado = true ? vacinado === "true" : false
+    vacinado = true ? vacinado === "true" : false
 
     if (!nome || !especie || !porte || (castrado !== false && castrado !== true) || (vacinado !== false && vacinado !== true) || !descricao) return res.status(400).send({ "erro": "Todos os campos obrigatórios devem ser preenchidos corretamente." })
 
