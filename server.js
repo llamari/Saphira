@@ -5,6 +5,7 @@ import "dotenv/config";
 // Importing routes
 import adocoes from "./src/routes/adocoes.routes.js";
 import animais from "./src/routes/animais.routes.js";
+import animais_admin from "./src/routes/animais_dashboard.routes.js";
 import doacoes from "./src/routes/doacoes.routes.js";
 import questionario from "./src/routes/questionario.routes.js";
 import users from "./src/routes/users.routes.js";
@@ -27,7 +28,8 @@ app.get('/', (req, res) => res.send("API da Saphira rodando!"))
 
 // Registering Routes
 app.use(adocoes);
-app.use(animais);
+app.use("/animais", animais);
+app.use("/admin/animais", animais_admin)
 app.use(doacoes);
 app.use(questionario);
 app.use(users);
