@@ -15,6 +15,21 @@ O Saphira é uma API desenvolvida no modelo REST, o objetivo do sistema é geren
 
 ## Documentação
 
+### Rodando o projeto 
+
+Em ambiente de desenvolvimento, utilize o comando no diretório do projeto:
+
+```
+npm run dev
+```
+
+Para ambiente de produção, rode:
+
+```
+npm run start
+```
+
+
 ### Seed do banco de dados
 
 Para realizar o seed do banco de dados, o populando com dados de exemplo, rode o seguinte comando no diretório principal do projeto:
