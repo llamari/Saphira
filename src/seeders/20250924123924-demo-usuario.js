@@ -10,7 +10,7 @@ export async function up(queryInterface, Sequelize) {
       id: uuidv4(),
       nome_completo: "admin",
       email: "admin@gmail.com",
-      senha: "@adm123",
+      senha: await bcrypt.hash("@adm123", 10),
       cidade: "Campinas",
       estado: "SP",
       idade: 99,
