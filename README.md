@@ -1,19 +1,53 @@
-# Saphira Sistema de Adoção - API REST com Node.js
-    
+# 🐾 Saphira Sistema de Adoção - API REST com Node.js
+
 ## 📌 Sobre o projeto
 O Saphira é uma API desenvolvida no modelo REST, o objetivo do sistema é gerenciar e facilitar o processo de adoções de animais. 
 
 ## ⚙️ Funcionalidades e Endpoints
 ### 🔹 Cadastro de Animais -> POST/animais
-✏️ Descrição: Faz o registro de um novo animal para a adoção.
+Descrição: Faz o registro de um novo animal para a adoção.
 
 ### 🔹 Cadastro de Tutor -> POST/tutores
-✏️ Descrição: Registro um novo usuário ao sistema com seus dados.
+Descrição: Registro um novo usuário ao sistema com seus dados.
 
 ### 🔹 Questionário de Responsabilidade -> POST/questionario
-✏️ Descrição: Para poder realizar a adoção de um animal, antes é necessário o respectivo tutor responder ao questionário de responsabilidade.
+Descrição: Para poder realizar a adoção de um animal, antes é necessário o respectivo tutor responder ao questionário de responsabilidade.
 
-## Documentação
+### 🔹 Visualização de animais para a adoção -> GET/animais ou GET/animais/:id
+Descrição: Lista os animais disponíveis para adoção com suporte a filtros (espécie, porte, castrado etc.). Possibilidade de ordenação do mais antigo ou do mais novo. Além de trazer as informações de um animal em específico se for inserido seu id para filtro de busca.
+
+### 🔹 Pedido de adoção -> POST/adocoes
+Descrição: Um tutor pode efetuar vários pedidos de adoção, e antes de fazer a requisição de um pedido de adoção ele deve anteriormente ter preenchido o questionário de responsabilidade.
+
+### 🔹 Atualização dos dados de um tutor -> PATCH/tutores/:id
+Descrição: Atuaiza os dados de um tutor em específico através de seu identificador único.
+
+### 🔹 Visualização de animais cadastrados (admin) -> GET/admin/animais ou GET/admin/animais/:id
+Descrição: Permite a um administrador a visualização de todos os animais, ou de um animal em específico que estão cadastrados no sistema.
+
+### 🔹 Atualização de Animais (admin) -> PATCH/admin/animais/:id
+Descrição: Permite a um adminstrador(somente) a atualização dos dados de um animal em específico através de seu identificador único.
+
+### 🔹 Detalhes dos Usuários (tutores) -> GET/tutores/:id 
+Descrição: Retorna os dados de um tutor em específico.
+
+### 🔹 Deletar perfil de um Animal (admin) -> DELETE/admin/animais/:id 
+Descrição: Remove o perfil de um animal do banco de dados.
+
+### 🔹 Login -> POST/autenticacao
+Descrição: Realiza a validação do perfil de um usuário no sistema para poder realizar as operações dentro dele. 
+
+### 🔹 Apoiar a ONG -> POST/doacoes 
+Descrição: Um usuário pode doar um valor em dinheiro para contribuir com a ONG. 
+
+---
+
+## 📜 Documentação do projeto 
+A documentação da API que descreve sua composição e seu guia de uso está no arquivo Swagger.
+
+🔗 Acesse a documentação [Swagger](swagger.json)
+
+---
 
 ### Rodando o projeto 
 
@@ -88,6 +122,3 @@ Felipe Hiroshi Carvalho Dinnouti,
 Gabriel Ziani Alves,
 Sara Lamari Silva,
 Vitor Paiva Nunes de Paula
-
-Link do repositório do Alex: 
-[repositorio](https://github.com/alexnasciment3/projeto_bento_2S_2025.git)
